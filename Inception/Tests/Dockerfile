@@ -6,6 +6,9 @@ RUN apt-get update \
 	&& rm -rf /var/lib/apt/lists/*
 	
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY diogmart.42.fr.crt /etc/nginx/diogmart.42.fr.crt
+COPY diogmart.42.fr.key /etc/nginx/diogmart.42.fr.key
+COPY index.html /var/www/html/index.html
 
 EXPOSE 80
 EXPOSE 443
