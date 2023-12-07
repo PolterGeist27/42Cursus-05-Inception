@@ -32,7 +32,10 @@ start:
 stop:
 	docker compose -p $(NAME) stop
 
-clean: down
+clean-images:
+	docker rmi -f $$(docker images -q) || true
+
+clean: down clean-images
 
 fclean: clean
 	@sudo rm -rf ~/data
