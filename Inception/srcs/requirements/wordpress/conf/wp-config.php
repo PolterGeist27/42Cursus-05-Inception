@@ -1,18 +1,30 @@
+<?php
+/**
+ * The base configuration for WordPress
+ *
+ * The wp-config.php creation script uses this file during the installation.
+ * You don't have to use the web site, you can copy this file to "wp-config.php"
+ * and fill in the values.
+ *
+ * This file contains the following configurations:
+ *
+ * * Database settings
+ * * Secret keys
+ * * Database table prefix
+ * * ABSPATH
+ *
+ * @link https://wordpress.org/documentation/article/editing-wp-config-php/
+ *
+ * @package WordPress
+ */
 
-define( 'DB_NAME', getenv('database1') );
-define( 'DB_USER', getenv('user1') );
-define( 'DB_PASSWORD', getenv('abc') );
-define( 'DB_HOST', getenv('mariadb') );
-define( 'WP_HOME', getenv('https://diogmart.42.fr') );
-define( 'WP_SITEURL', getenv('https://diogmart.42.fr') );
-
-
-//define( 'DB_NAME', getenv('DB_NAME') );
-//define( 'DB_USER', getenv('DB_USER') );
-//define( 'DB_PASSWORD', getenv('DB_PASSWORD') );
-//define( 'DB_HOST', getenv('DB_HOST') );
-//define( 'WP_HOME', getenv('WP_FULL_URL') );
-//define( 'WP_SITEURL', getenv('WP_FULL_URL') );
+// ** Database settings - You can get this info from your web host ** //
+define( 'DB_NAME', getenv('DB_NAME') );
+define( 'DB_USER', getenv('DB_USER') );
+define( 'DB_PASSWORD', getenv('DB_PASSWORD') );
+define( 'DB_HOST', getenv('DB_HOST') );
+define( 'WP_HOME', getenv('WP_FULL_URL') );
+define( 'WP_SITEURL', getenv('WP_FULL_URL') );
 define( 'DB_CHARSET', 'utf8' );
 define( 'DB_COLLATE', '' );
 
@@ -27,14 +39,14 @@ define( 'DB_COLLATE', '' );
  *
  * @since 2.6.0
  */
-define( 'AUTH_KEY',         '' );
-define( 'SECURE_AUTH_KEY',  '' );
-define( 'LOGGED_IN_KEY',    '' );
-define( 'NONCE_KEY',        '' );
-define( 'AUTH_SALT',        '' );
-define( 'SECURE_AUTH_SALT', '' );
-define( 'LOGGED_IN_SALT',   '' );
-define( 'NONCE_SALT',       '' );
+define( 'AUTH_KEY',         getenv('WP_AUTH_KEY') );
+define( 'SECURE_AUTH_KEY',  getenv('WP_SECURE_AUTH_KEY') );
+define( 'LOGGED_IN_KEY',    getenv('WP_LOGGED_IN_KEY') );
+define( 'NONCE_KEY',        getenv('WP_NONCE_KEY') );
+define( 'AUTH_SALT',        getenv('WP_AUTH_SALT') );
+define( 'SECURE_AUTH_SALT', getenv('WP_SECURE_AUTH_SALT') );
+define( 'LOGGED_IN_SALT',   getenv('WP_LOGGED_IN_SALT') );
+define( 'NONCE_SALT',       getenv('WP_NONCE_SALT') );
 
 /**#@-*/
 
@@ -56,8 +68,20 @@ $table_prefix = 'wp_';
  * For information on other constants that can be used for debugging,
  * visit the documentation.
  *
- * @link https://wordpress.org/support/article/debugging-in-wordpress/
+ * @link https://wordpress.org/documentation/article/debugging-in-wordpress/
  */
-define( 'WP_DEBUG', true );
+define( 'WP_DEBUG', false );
 
 /* Add any custom values between this line and the "stop editing" line. */
+
+
+
+/* That's all, stop editing! Happy publishing. */
+
+/** Absolute path to the WordPress directory. */
+if ( ! defined( 'ABSPATH' ) ) {
+	define( 'ABSPATH', __DIR__ . '/' );
+}
+
+/** Sets up WordPress vars and included files. */
+require_once ABSPATH . 'wp-settings.php';

@@ -1,0 +1,97 @@
+version: '3.8'
+
+# ======================
+#	Containers		
+# ======================
+
+services:
+
+#	Mariadb
+  mariadb:
+    image: mariadb:42
+    container_name: mariadb
+    build: ./requirements/mariadb/
+    expose:
+      - "3306" # Expose port 3306 to other services
+    volumes:
+      - database:/var/lib/mysql/
+    networks:
+      - inception # Custom network
+    env_file: .env # Inject variables into the env of the container
+    init: true
+    restart: on-failure
+
+#	Wordpress
+  wordpress:
+    image: wordpress:42
+    container_name: wordpress
+    build: ./requirements/wordpress/
+    expose:
+      - "9000" # Expose port 9000 to other services
+    volumes:
+      - wordpress_files:/var/www/inception/
+    networks:
+      - inception # Custom network
+    env_file: .env # Inject variables into the env of the container
+    init: true
+    restart: on-failure
+    depends_on:
+      - mariadb
+
+#	Nginx
+  nginx:
+    image: nginx:42
+    container_name: nginx
+    build:
+      context: ./requirements/nginx/
+      args:
+        CERT_FOLDER: ${CERT_DIR}
+        CERTIFICATE: ${CERTIFICATE}
+        KEY: ${KEY}
+        COUNTRY: ${COUNTRY}
+        STATE: ${STATE}
+        LOCALITY: ${LOCALITY}
+        ORGANIZATION: ${ORGANIZATION}
+        UNIT: ${UNIT}
+        COMMON_NAME: ${DOMAIN_NAME}
+    ports:
+      - '443:443' # Standard port for https
+    volumes:
+      - wordpress_files:/var/www/inception/
+    networks:
+      - inception # Custom network
+    env_file: .env # Inject variables into the env of the container
+    init: true
+    restart: on-failure
+    depends_on:
+      - wordpress
+
+# ======================
+#	Volumes		
+# ======================
+
+volumes:
+
+  # Stores the database
+  database:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ~/data/database
+
+  # Stores the wordpress files
+  wordpress_files:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ~/data/wordpress_files
+
+# ======================
+#	Networks		
+# ======================
+
+networks:
+  inception:
+    driver: bridge
