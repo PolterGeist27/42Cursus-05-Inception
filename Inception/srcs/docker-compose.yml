@@ -29,7 +29,7 @@ services:
     expose:
       - "9000" # Expose port 9000 to other services
     volumes:
-      - wordpress_files:/var/www/inception/
+      - wordpress_files:/var/www/wordpress/
     networks:
       - inception # Custom network
     env_file: .env # Inject variables into the env of the container
@@ -57,7 +57,7 @@ services:
     ports:
       - '443:443' # Standard port for https
     volumes:
-      - wordpress_files:/var/www/inception/
+      - wordpress_files:/var/www/wordpress/
     networks:
       - inception # Custom network
     env_file: .env # Inject variables into the env of the container

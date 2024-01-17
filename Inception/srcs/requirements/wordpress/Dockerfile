@@ -10,33 +10,31 @@ RUN		apt update && apt install --no-install-recommends --no-install-suggests -y 
 		ca-certificates \
 		php7.4-fpm \
 		php7.4-mysql \
+		mariadb-client \
 		wget \
-		tar && \
-		rm -rf /var/lib/apt/lists/*
-		
+		tar
 
-RUN	service php7.4-fpm stop
+# Download and extract WordPress
+RUN wget https://wordpress.org/wordpress-6.3.1.tar.gz -P /var/www
+RUN cd /var/www && tar -xzf wordpress-6.3.1.tar.gz && rm wordpress-6.3.1.tar.gz
 
-COPY	conf/www.conf ${PHPPATH}/pool.d/
+# Copy the WordPress configuration file
+COPY ./conf/wp-config.php /var/www/wordpress/
 
-RUN	sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' ${PHPPATH}/php.ini && \ 
-	sed -i "s/listen = \/run\/php\/php$PHP_VERSION_ENV-fpm.sock/listen = 9000/g" ${PHPPATH}/pool.d/www.conf && \
-	sed -i 's/;listen.mode = 0660/listen.mode = 0660/g' ${PHPPATH}/pool.d/www.conf && \
-	sed -i 's/;daemonize = yes/daemonize = no/g' ${PHPPATH}/pool.d/www.conf
-	
-RUN	wget --no-check-certificate https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
-	chmod +x wp-cli.phar && \
-	mv wp-cli.phar /usr/local/bin/wp
-	
-RUN	mkdir -p /run/php/ && \
-	mkdir -p /var/run/php/ && \
-	mkdir -p /var/www/inception/
+# Set ownership of the WordPress directory
+RUN chown -R root:root /var/www/wordpress
 
-RUN	chown -R www-data:www-data /var/www/inception/
+# Configure PHP to work with WordPress
+COPY	./conf/www.conf /etc/php/7.4/fpm/pool.d/
+RUN	mkdir -p /run/php
 
-COPY	conf/wp-config.php /tmp/
+# Download and install WordPress Command Line Interface
+RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
 
-COPY	tools/setup.sh /bin/
+# Copy the WordPress setup script
+COPY	./tools/setup.sh /bin/
 RUN	chmod +x /bin/setup.sh
 
 ENTRYPOINT	["sh", "/bin/setup.sh"]

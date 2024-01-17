@@ -28,8 +28,8 @@ wp core install --url="$WP_URL" \
     --allow-root
 
 # Create a new WordPress user
-wp user create "$WP_USER" "$WP_USER_EMAIL" \
-    --user_pass="$WP_USER_PASSWORD" \
+wp user create "$WP_USER" "$WP_EMAIL" \
+    --user_pass="$WP_PASSWORD" \
     --role="$WP_ROLE" \
     --path='/var/www/wordpress' \
     --allow-root
