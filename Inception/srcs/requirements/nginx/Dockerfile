@@ -4,11 +4,9 @@ FROM debian:bullseye
 # Standard port for https
 EXPOSE 443
 
-
 RUN	apt update && apt install -y --no-install-recommends --no-install-suggests \
 	nginx \
-	openssl && \
-	rm -rf /var/lib/apt/lists/*
+	openssl
 	
 # Variables from env
 ARG	CERT_FOLDER
@@ -28,15 +26,16 @@ RUN mkdir -p ${CERT_FOLDER} && \
     -keyout ${KEY} \
     -subj "/C=${COUNTRY}/ST=${STATE}/L=${LOCALITY}/O=${ORGANIZATION}/OU=${UNIT}/CN=${DOMAIN_NAME}"
 
-COPY	conf/nginx.conf	/etc/nginx/
+RUN mkdir -p /var/run/nginx
+
+COPY ./conf/nginx.conf /etc/nginx/
 
 # Substitute variables in NGINX configuration file for env variables
-RUN	sed -i "s#{{CERTIFICATE}}#$CERTIFICATE#g" /etc/nginx/nginx.conf
-RUN	sed -i "s#{{KEY}}#$KEY#g" /etc/nginx/nginx.conf
-RUN	sed -i "s#{{DOMAIN_NAME}}#$DOMAIN_NAME#g" /etc/nginx/nginx.conf
+RUN sed -i "s#{{CERTIFICATE}}#$CERTIFICATE#g" /etc/nginx/nginx.conf
+RUN sed -i "s#{{KEY}}#$KEY#g" /etc/nginx/nginx.conf
+RUN sed -i "s#{{DOMAIN_NAME}}#$DOMAIN_NAME#g" /etc/nginx/nginx.conf
 
-RUN	mkdir -p /var/www/
-RUN	chown -R www-data:www-data /var/www/
+RUN chmod 755 /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
-CMD		["nginx", "-g", "daemon off;"]
-
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

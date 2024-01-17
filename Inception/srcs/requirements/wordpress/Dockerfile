@@ -39,4 +39,4 @@ COPY	conf/wp-config.php /tmp/
 COPY	tools/setup.sh /bin/
 RUN	chmod +x /bin/setup.sh
 
-CMD	["setup.sh", "php-fpm7.4", "--nodaemonize"]
+ENTRYPOINT	["sh", "/bin/setup.sh"]

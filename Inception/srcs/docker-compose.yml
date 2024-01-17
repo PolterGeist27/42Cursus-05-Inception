@@ -53,7 +53,7 @@ services:
         LOCALITY: ${LOCALITY}
         ORGANIZATION: ${ORGANIZATION}
         UNIT: ${UNIT}
-        COMMON_NAME: ${DOMAIN_NAME}
+        DOMAIN_NAME: ${DOMAIN_NAME}
     ports:
       - '443:443' # Standard port for https
     volumes:
