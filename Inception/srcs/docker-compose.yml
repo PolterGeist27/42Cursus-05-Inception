@@ -86,7 +86,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ~/data/wordpress_files
+      device: ~/data/wordpress
 
 # ======================
 #	Networks		

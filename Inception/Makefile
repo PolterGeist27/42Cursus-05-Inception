@@ -11,17 +11,17 @@ GREEN = \033[0;32m
 all: conf up
 
 conf:
-	@echo "$(Green)Getting .env from root...$(RESET)\n"
+	@echo "$(GREEN)Getting .env from root...$(RESET)\n"
 	@cp ~/.env ./srcs/
-	@echo "$(Green)Creating data directory...$(RESET)\n"
-	@mkdir -p ~/data/database ~/data/wordpress_files
-	@echo "$(Green)Setting url as host...$(RESET)\n"
+	@echo "$(GREEN)Creating data directory...$(RESET)\n"
+	@mkdir -p ~/data/database ~/data/wordpress
+	@echo "$(GREEN)Setting url as host...$(RESET)\n"
 	@sudo sed -i '/^127.0.0.1/ {/diogmart.42.fr/! s/localhost/localhost diogmart.42.fr/}' /etc/hosts
 	@echo "\n"
-	@echo "$(Green)Composing...$(RESET)"
+	@echo "$(GREEN)Composing...$(RESET)"
 
 up:
-	docker compose -p $(NAME) -f $(COMPOSE) up --build
+	docker compose -p $(NAME) -f $(COMPOSE) up --build -d
 
 down:
 	docker compose -p $(NAME) down --volumes
