@@ -21,7 +21,7 @@ conf:
 	@echo "$(GREEN)Composing...$(RESET)"
 
 up:
-	docker compose -p $(NAME) -f $(COMPOSE) up --build #-d
+	docker compose -p $(NAME) -f $(COMPOSE) up --build -d
 
 down:
 	docker compose -p $(NAME) down --volumes

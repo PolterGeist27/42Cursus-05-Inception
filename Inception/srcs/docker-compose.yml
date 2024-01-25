@@ -45,7 +45,7 @@ services:
     build:
       context: ./requirements/nginx/
       args:
-        CERT_FOLDER: ${CERT_DIR}
+        CERT_DIR: ${CERT_DIR}
         CERTIFICATE: ${CERTIFICATE}
         KEY: ${KEY}
         COUNTRY: ${COUNTRY}
