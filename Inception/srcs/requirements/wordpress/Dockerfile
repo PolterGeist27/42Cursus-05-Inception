@@ -4,8 +4,6 @@ FROM debian:bullseye
 # Default port for PHP-FPM
 EXPOSE	9000
 
-ARG	PHPPATH=/etc/php/7.4/fpm
-
 RUN		apt update && apt install --no-install-recommends --no-install-suggests -y \
 		ca-certificates \
 		php7.4-fpm \
